@@ -83,21 +83,7 @@ class Simpers_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Simpers_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Simpers_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/simpers-admin.js', array( 'jquery' ), $this->version, false );
-
 	}
 
 
@@ -107,27 +93,39 @@ class Simpers_Admin {
 	 * @since    1.0.0
 	 */
 	public function add_options_page() {
-
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Simpers_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Simpers_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-	    add_options_page( 'Simpers options', 'Simpers', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page')
-	    );
-
+    add_options_page( 'Simpers options', 'Simpers', 'manage_options', $this->plugin_name, array($this, 'display_plugin_setup_page')
+    );
 	}
 
 	public function display_plugin_setup_page() {
 		include_once( 'partials/simpers-admin-display.php' );
 	}
+
+	/**
+	 * Add product editor checkbox
+	 * @since    1.0.0
+	 */
+	public function add_product_editor_checkbox() {
+		global $woocommerce, $post;
+	  echo '<div class="options_group">';
+		woocommerce_wp_checkbox( // Product can be personalized
+      array( 
+          'id'          => 'simpers_enable', 
+          'label'       => __( 'Enable simple personalization', 'woocommerce' ), 
+          'description' => __( 'Check this box to enable simple personalization on this product', 'woocommerce' ) 
+      )
+    );
+	  echo '</div>';
+	}
+
+	/**
+	 * Save checkbox with product as meta
+	 * @since    1.0.0
+	 */
+	public function save_product_editor_checkbox( $post_id ) {
+		$pw_enable = $_POST['simpers_enable'];
+    update_post_meta( $post_id, 'simpers_enable', esc_attr( $pw_enable ) );
+	}
+
 
 }
