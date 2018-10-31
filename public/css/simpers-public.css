@@ -2,3 +2,10 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+  .simpers-field-text {
+    background: none;
+    border: 0!important;
+    border-radius: 0!important;
+    box-shadow: 0 1px 0 #000;
+  }

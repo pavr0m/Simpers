@@ -86,7 +86,47 @@ class Simpers_Public {
 	public function simpers_customization_frontend_field() {
 		global $post;
 			if ( get_post_meta($post->ID)['simpers_enable'][0] == 'yes' ) :
-			echo '<p><div><input type="text" name="simpers-text1" placeholder="'.__("Your text",$this->$plugin_name). '"></div></p>';
+
+			echo '<p><div id="simpers-fields"><label>Add your text: <input class="simpers-field-text" placeholder="Click to start typing" type="text" name="simpers-text1"></div></p>';
+			ob_start();
+			?>
+				<script>
+					var simpers = {};
+					
+					simpers.addtocart = document.querySelector('.single_add_to_cart_button');
+					
+					simpers.enableAddtocart = function() {
+						simpers.addtocart.removeAttribute('disabled');
+					};
+
+					simpers.disableAddtocart = function() {
+						document.querySelector('.single_add_to_cart_button').setAttribute('disabled', 'true');
+						console.log('addtocart: disabled');
+					};
+					
+					simpers.validateFields = function(element,event) {
+						if ( !(element.value == '' ) ) {
+							simpers.enableAddtocart();
+						} else {
+							simpers.disableAddtocart();
+						}
+					};
+					
+					document.querySelector('.simpers-field-text').addEventListener('input', function(){
+						simpers.validateFields(this,event);
+					});
+
+					window.addEventListener('load',function(){
+						document.querySelector('.single_add_to_cart_button').setAttribute('disabled', 'true');
+						console.log('addtocart: disabled');
+					});
+					
+
+
+				</script>
+			<?php
+			ob_end_flush();
+
 		endif;
 	}
 
