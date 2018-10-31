@@ -107,12 +107,13 @@ class Simpers_Admin {
 	 */
 	public function add_product_editor_checkbox() {
 		global $woocommerce, $post;
-	  echo '<div class="options_group">';
+	  echo '<div class="options_group"><h4 style="padding: 5px 10px;">Simplest personalization</h4>';
+
 		woocommerce_wp_checkbox( // Product can be personalized
       array( 
           'id'          => 'simpers_enable', 
-          'label'       => __( 'Enable simple personalization', 'woocommerce' ), 
-          'description' => __( 'Check this box to enable simple personalization on this product', 'woocommerce' ) 
+          'label'       => __( 'Enable simplest personalization', 'woocommerce' ), 
+          'description' => __( 'Check this box to enable Simplest personalization text field on this product', 'woocommerce' ) 
       )
     );
 	  echo '</div>';
