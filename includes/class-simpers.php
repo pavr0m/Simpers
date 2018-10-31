@@ -174,10 +174,12 @@ class Simpers {
 
 		$plugin_public = new Simpers_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'woocommerce_after_add_to_cart_button', $plugin_public, 'customization_frontend_field' );
-
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'simpers_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'simpers_enqueue_scripts' );
+		$this->loader->add_action( 'woocommerce_after_add_to_cart_button', $plugin_public, 'simpers_customization_frontend_field' );
+		$this->loader->add_action( 'woocommerce_add_cart_item_data', $plugin_public, 'simpers_add_cart_item_data', 10, 3 );
+		$this->loader->add_filter( 'woocommerce_get_item_data', $plugin_public, 'simpers_get_item_data', 10, 2 );
+		$this->loader->add_action( 'woocommerce_checkout_create_order_line_item', $plugin_public, 'simpers_checkout_create_order_line_item', 15, 5 );
 	}
 
 	/**

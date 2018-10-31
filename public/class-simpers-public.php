@@ -63,7 +63,7 @@ class Simpers_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function simpers_enqueue_styles() {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/simpers-public.css', array(), $this->version, 'all' );
 
@@ -73,7 +73,7 @@ class Simpers_Public {
 	 * Register the JavaScript for the public-facing side of the site.
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function simpers_enqueue_scripts() {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/simpers-public.js', array( 'jquery' ), $this->version, false );
 	}
@@ -83,13 +83,49 @@ class Simpers_Public {
 	 * Add text field on the frontend
 	 * @since    1.0.0
 	 */
-	public function customization_frontend_field() {
-		echo '<p><div><input type="text" placeholder="Your text"></div></p>';
+	public function simpers_customization_frontend_field() {
+		global $post;
+			if ( get_post_meta($post->ID)['simpers_enable'][0] == 'yes' ) :
+			echo '<p><div><input type="text" name="simpers-text1" placeholder="'.__("Your text",$this->$plugin_name). '"></div></p>';
+		endif;
+	}
+
+	/**
+	 * Save user input with the cart item data
+	 * @since    1.0.0
+	 */
+	public function simpers_add_cart_item_data( $cart_item_data, $product_id, $variation_id ) {
+    $simpers_text1 = filter_input( INPUT_POST, 'simpers-text1'  );
+    if ( !empty($simpers_text1) ) {
+      $cart_item_data['simpers_text1'] = $simpers_text1;
+    }
+    return $cart_item_data;
 	}
 
 
+	/**
+	 *  Get item meta data for cart item
+	 */ 
+	public function simpers_get_item_data( $item_data, $cart_item ) {
+    if ( !empty( $cart_item['simpers_text1'] ) ) {
+      $item_data[] = array(
+          'key'     => __( 'Your text', 'simpers' ),
+          'value'   => wc_clean( $cart_item['simpers_text1'] ),
+          'display' => '',
+      );
+    }
+    return $item_data;
+	}
 
 
+	/**
+	 *  Set meta fields for order items
+	 */
+	public function simpers_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+    if ( ! empty( $values['simpers_text1'] ) ) {
+      $item->add_meta_data( __( 'Your Text', 'simpers' ), $values['simpers_text1'] );
+    }
+	}
 
 
 }
