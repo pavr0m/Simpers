@@ -103,11 +103,12 @@ class Simpers_Admin {
 
 	/**
 	 * Add product editor checkbox
+	 * 
 	 * @since    1.0.0
 	 */
 	public function add_product_editor_checkbox() {
 		global $woocommerce, $post;
-	  echo '<div class="options_group"><h4 style="padding: 5px 10px;">Simplest personalization</h4>';
+	  echo '<div class="options_group options_group--simpers"><h4 style="padding: 5px 10px;">Simplest personalization</h4>';
 
 		woocommerce_wp_checkbox( // Product can be personalized
       array( 
@@ -116,7 +117,117 @@ class Simpers_Admin {
           'description' => __( 'Check this box to enable Simplest personalization text field on this product', 'woocommerce' ) 
       )
     );
-	  echo '</div>';
+
+    woocommerce_wp_text_input( // Product can be personalized
+      array( 
+          'id'          => 'simpers_textfield1_label', 
+          'label'       => __( 'Text field label ', 'woocommerce' ), 
+          'description' => __( 'Add a label that will help users understand how to use the text field.', 'woocommerce' ) 
+      )
+    );
+
+    ob_start();
+    ?>	
+    <style>
+    .options_group--simpers label {
+    	line-height: 1.25em;
+    }
+    .simpers_textfield1_label_field .description {
+	    display: block;
+	    clear: both;
+	    margin: 0;
+    }
+  	</style>
+    <?php
+    ob_end_flush();
+
+    echo '</div>';
+
+  //   $args = array(
+		//   'label' => '', // Text in Label
+		//   'placeholder' => '',
+		//   'class' => '',
+		//   'style' => '',
+		//   'wrapper_class' => '',
+		//   'value' => '', // if empty, retrieved from post meta where id is the meta_key
+		//   'id' => '', // required
+		//   'name' => '', //name will set from id if empty
+		//   'type' => '',
+		//   'desc_tip' => '',
+		//   'data_type' => '',
+		//   'custom_attributes' => '', // array of attributes 
+		//   'description' => ''
+		// );
+		// woocommerce_wp_text_input( $args );
+
+		// $args = array(
+		//   'label' => '', // Text in Label
+		//   'class' => '',
+		//   'style' => '',
+		//   'wrapper_class' => '',
+		//   'value' => '', // if empty, retrieved from post meta where id is the meta_key
+		//   'id' => '', // required
+		//   'name' => '', //name will set from id if empty
+		//   'cbvalue' => '',
+		//   'desc_tip' => '',
+		//   'custom_attributes' => '', // array of attributes 
+		//   'description' => ''
+		// );
+		// woocommerce_wp_checkbox( $args );
+
+		// $args = array(
+		//   'label' => '', // Text in Label
+		//   'class' => '',
+		//   'style' => '',
+		//   'wrapper_class' => '',
+		//   'value' => '', // if empty, retrieved from post meta where id is the meta_key
+		//   'id' => '', // required
+		//   'name' => '', //name will set from id if empty
+		//   'options' => '', // Options for radio inputs, array
+		//   'desc_tip' => '', 
+		//   'description' => ''
+		// );
+		// woocommerce_wp_radio( $args );
+
+
+  //   $args = array(
+		//   'label' => '', // Text in Label
+		//   'placeholder' => '',
+		//   'class' => '',
+		//   'style' => '',
+		//   'wrapper_class' => '',
+		//   'value' => '', // if empty, retrieved from post meta where id is the meta_key
+		//   'id' => '', // required
+		//   'name' => '', //name will set from id if empty
+		//   'rows' => '',
+		//   'cols' => '',
+		//   'desc_tip' => '',
+		//   'custom_attributes' => '', // array of attributes 
+		//   'description' => ''
+		// );
+		// woocommerce_wp_textarea_input( $args );
+
+		// $args = array(
+		//   'label' => '', // Text in Label
+		//   'class' => '',
+		//   'style' => '',
+		//   'wrapper_class' => '',
+		//   'value' => '', // if empty, retrieved from post meta where id is the meta_key
+		//   'id' => '', // required
+		//   'name' => '', //name will set from id if empty
+		//   'options' => '', // Options for select, array
+		//   'desc_tip' => '',
+		//   'custom_attributes' => '', // array of attributes 
+		//   'description' => ''
+		// );
+		// woocommerce_wp_select( $args );
+
+		// $args = array(
+		//   'value' => '',
+		//   'class' => '',
+		//   'id' => ''
+		// );
+		// woocommerce_wp_hidden_input( $args );
 	}
 
 	/**
@@ -124,8 +235,13 @@ class Simpers_Admin {
 	 * @since    1.0.0
 	 */
 	public function save_product_editor_checkbox( $post_id ) {
-		$pw_enable = $_POST['simpers_enable'];
-    update_post_meta( $post_id, 'simpers_enable', esc_attr( $pw_enable ) );
+		$simpers_enable = $simpers_text1 = filter_input( INPUT_POST, 'simpers_enable'  );
+		if ( !empty($simpers_enable) ) {
+    	update_post_meta( $post_id, 'simpers_enable', esc_attr( $simpers_enable ) );
+    }
+
+    $simpers_textfield1_label = filter_input( INPUT_POST, 'simpers_textfield1_label'  );
+  	update_post_meta( $post_id, 'simpers_textfield1_label', esc_attr( $simpers_textfield1_label ) );
 	}
 
 

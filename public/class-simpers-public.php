@@ -91,16 +91,27 @@ class Simpers_Public {
 
 			if ( get_post_meta($post->ID)['simpers_enable'][0] == 'yes' ) :
 
-			echo '<div id="simpers-fields"><label>Add your personal text: <input id="simpers-field-text1" class="simpers-field-text" placeholder="Click to start typing" type="text" name="simpers-text1"><p id="simpers-field-text1-error"></p></div>';
+			if ( !empty(get_post_meta($post->ID)['simpers_textfield1_label'][0] ) ) {
+					$field_label = get_post_meta($post->ID)['simpers_textfield1_label'][0];
+			} else {
+				$field_label = "Your text:";
+			}
+
 			ob_start();
 			?>
+
+			  <div id="simpers-fields">
+			  	<label><?php echo $field_label; ?>
+			  	<input id="simpers-field-text1" class="simpers-field-text" placeholder="Click to start typing" type="text" name="simpers-text1">
+			  	<p id="simpers-field-text1-error"></p>
+			  </div>
+				
 				<style>
 					#simpers-fields {
 						margin-top: 10px;
 					}
 				</style>
 				<script>
-				
 					var simpers = {};
 					
 					simpers.addtocart = document.querySelector('.single_add_to_cart_button');
