@@ -85,12 +85,22 @@ class Simpers_Public {
 	 */
 	public function simpers_customization_frontend_field() {
 		global $post;
+			if ( empty(get_post_meta($post->ID)['simpers_enable'] ) ) {
+				return;
+			}
+
 			if ( get_post_meta($post->ID)['simpers_enable'][0] == 'yes' ) :
 
-			echo '<p><div id="simpers-fields"><label>Add your text: <input class="simpers-field-text" placeholder="Click to start typing" type="text" name="simpers-text1"></div></p>';
+			echo '<div id="simpers-fields"><label>Add your personal text: <input id="simpers-field-text1" class="simpers-field-text" placeholder="Click to start typing" type="text" name="simpers-text1"><p id="simpers-field-text1-error"></p></div>';
 			ob_start();
 			?>
+				<style>
+					#simpers-fields {
+						margin-top: 10px;
+					}
+				</style>
 				<script>
+				
 					var simpers = {};
 					
 					simpers.addtocart = document.querySelector('.single_add_to_cart_button');
@@ -105,10 +115,23 @@ class Simpers_Public {
 					};
 					
 					simpers.validateFields = function(element,event) {
+
+						var filter_param = /[^âêîôûŵŷäëïöüẅÿàèìòùẁỳáéíóúẃýå\w\s\d]/gi;
+						var errorField = document.getElementById('simpers-field-text1-error');
+						
+
 						if ( !(element.value == '' ) ) {
-							simpers.enableAddtocart();
+							if ( !element.value.match(filter_param) ) {
+								errorField.innerHTML =  '';
+								simpers.enableAddtocart();
+							} else {
+								errorField.innerHTML =  '';
+								errorField.append('Please use only alphanumeric symbols');
+							}
 						} else {
 							simpers.disableAddtocart();
+							errorField.innerHTML =  '';
+							errorField.append('Please enter your text');
 						}
 					};
 					
@@ -116,11 +139,7 @@ class Simpers_Public {
 						simpers.validateFields(this,event);
 					});
 
-					window.addEventListener('load',function(){
-						document.querySelector('.single_add_to_cart_button').setAttribute('disabled', 'true');
-						console.log('addtocart: disabled');
-					});
-					
+					document.querySelector('.single_add_to_cart_button').setAttribute('disabled', 'true');
 
 
 				</script>
